@@ -58,6 +58,9 @@ defmodule Mix.Tasks.Cover do
     # reset any existing cover data
     :cover.reset()
 
+    # compile tests if not done yet
+    Mix.Task.run("compile")
+
     # cover-compile eligible modules
     project = Mix.Project.config()
     compile(project)
