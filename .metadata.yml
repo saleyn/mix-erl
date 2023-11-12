@@ -1,0 +1,12 @@
+metadata:
+  name: mix_erl
+  description: Erlang-specific Mix Tasks
+  labels:
+    jira-project: DEGA
+    jira-board: 189
+  links:
+  - url: https://github.com/adgear/mix-erl
+spec:
+  owner: cg-dsp-bidding-systems
+  type: tool
+  lifecycle: experimental
