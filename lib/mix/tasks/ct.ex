@@ -217,7 +217,7 @@ defmodule Mix.Tasks.Ct do
       "#{ok} ok, #{failed} failed, #{userSkipped} user-skipped, #{autoSkipped} auto-skipped"
     )
 
-    failed > 0
+    failed == 0
   end
 
   # parallel tests result
@@ -238,7 +238,7 @@ defmodule Mix.Tasks.Ct do
         IO.puts("error: #{inspect(error)}")
     end)
 
-    failed > 0 or length(errs) > 0
+    failed == 0 and errs == []
   end
 
   defp check_result({:error, reason}) do
