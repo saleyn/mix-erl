@@ -111,8 +111,8 @@ defmodule Mix.Tasks.Ct do
         Mix.shell().info("run parallel tests")
         run_parallel(suites, target, log_dir, verbosity)
       else
-        Mix.shell().info("run sequential tests")
-        run_sequence(suites, target, log_dir, verbosity)
+        Mix.shell().info("runsequential tests")
+        run_sequential(suites, target, log_dir, verbosity)
       end
       |> check_result
 
@@ -131,7 +131,7 @@ defmodule Mix.Tasks.Ct do
     fn -> Process.group_leader(pid, stdout) end
   end
 
-  defp run_sequence(suites, target, log_dir, verbosity) do
+  defp run_sequential(suites, target, log_dir, verbosity) do
     suites_atoms = Enum.map(suites, &String.to_atom/1)
 
     # mute standard output
