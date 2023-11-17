@@ -172,11 +172,20 @@ defmodule Mix.Tasks.Ct do
         suite_name = &1
         suite_atom = String.to_atom(suite_name)
 
-        {:ok, _pid, node} =
+        tag = make_ref()
+
+        {:ok, pid} =
           :peer.start_link(%{
             name: suite_atom,
-            post_process_args: fn args -> add_args ++ args end
+            post_process_args: fn args -> add_args ++ args end,
+            wait_boot: {self(), tag}
           })
+
+        node =
+          receive do
+            {^tag, {:started, node, ^pid}} ->
+              node
+          end
 
         true = :rpc.call(node, :code, :set_path, [:code.get_path()])
 
