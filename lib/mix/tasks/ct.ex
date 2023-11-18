@@ -111,7 +111,7 @@ defmodule Mix.Tasks.Ct do
         Mix.shell().info("run parallel tests")
         run_parallel(suites, target, log_dir, verbosity)
       else
-        Mix.shell().info("runsequential tests")
+        Mix.shell().info("run sequential tests")
         run_sequential(suites, target, log_dir, verbosity)
       end
       |> check_result
