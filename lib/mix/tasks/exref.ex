@@ -27,7 +27,7 @@ defmodule Mix.Tasks.Exref do
     xref_checks = project[:xref_checks] || [:exports_not_used, :undefined_function_calls]
     xref_ignores = project[:xref_ignores] || []
 
-    for x <- Mix.Utils.extract_files([to_string(:code.lib_dir())], "tools-*/ebin") do
+    for x <- Mix.Utils.extract_files([to_string(:code.lib_dir())], "*/ebin") do
       Code.append_path(x)
     end
 
@@ -46,7 +46,6 @@ defmodule Mix.Tasks.Exref do
         filtered_results = results |> filter_result(check, xref_ignores, verbose)
 
         filtered_results
-        |> Enum.slice(1..5)
         |> Enum.each(report_fun(check))
 
         filtered_results == []
