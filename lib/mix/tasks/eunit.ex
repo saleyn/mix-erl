@@ -67,10 +67,12 @@ defmodule Mix.Tasks.Eunit do
 
     cover_analys && Mix.Tasks.Cover.compile(project)
 
-    :eunit.test(test_spec, eunit_options)
+    result = :eunit.test(test_spec, eunit_options)
 
     cover_export && Mix.Tasks.Cover.export(:eunit)
     cover_inform && Mix.Tasks.Cover.report(cover_digest, cover_report)
     cover_analys && Mix.Tasks.Cover.reset()
+
+    result == :ok || System.stop(1)
   end
 end
