@@ -101,6 +101,7 @@ defmodule Mix.Tasks.Ct do
     # Configure CT settings
     log_dir = project[:log_dir] || Path.join(Mix.Project.build_path(project), "logs")
     verbosity = project[:ct_verbosity] || 100
+    hooks = project[:ct_hooks] || []
 
     File.mkdir_p!(log_dir)
 
@@ -109,10 +110,10 @@ defmodule Mix.Tasks.Ct do
     ret =
       if opts[:parallel] do
         Mix.shell().info("run parallel tests")
-        run_parallel(suites, target, log_dir, verbosity)
+        run_parallel(suites, target, log_dir, hooks, verbosity)
       else
         Mix.shell().info("run sequential tests")
-        run_sequential(suites, target, log_dir, verbosity)
+        run_sequential(suites, target, log_dir, hooks, verbosity)
       end
       |> check_result
 
@@ -131,7 +132,7 @@ defmodule Mix.Tasks.Ct do
     fn -> Process.group_leader(pid, stdout) end
   end
 
-  defp run_sequential(suites, target, log_dir, verbosity) do
+  defp run_sequential(suites, target, log_dir, hooks, verbosity) do
     suites_atoms = Enum.map(suites, &String.to_atom/1)
 
     # mute standard output
@@ -139,7 +140,7 @@ defmodule Mix.Tasks.Ct do
 
     try do
       :ct.run_testspec([
-        {:ct_hooks, [:cth_readable_failonly, :cth_readable_compact_shell]},
+        {:ct_hooks, [:cth_readable_failonly, :cth_readable_compact_shell | hooks]},
         {:logdir, to_charlist(log_dir)},
         {:config, ~c"test/test.config"},
         {:verbosity, [default: verbosity]},
@@ -150,7 +151,7 @@ defmodule Mix.Tasks.Ct do
     end
   end
 
-  defp run_parallel(suites, target, log_dir, verbosity) do
+  defp run_parallel(suites, target, log_dir, hooks, verbosity) do
     case :net_adm.names() do
       {:ok, _} ->
         :ok
@@ -198,7 +199,7 @@ defmodule Mix.Tasks.Ct do
         ret =
           :rpc.call(node, :ct, :run_testspec, [
             [
-              {:ct_hooks, [:cth_readable_failonly, :cth_readable_compact_shell]},
+              {:ct_hooks, [:cth_readable_failonly, :cth_readable_compact_shell | hooks]},
               {:logdir, to_charlist(suite_logdir)},
               {:config, ~c"test/test.config"},
               {:verbosity, [default: verbosity]},
