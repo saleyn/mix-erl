@@ -1,6 +1,15 @@
 # Mix Erl
 
-Erlang-specific Mix Tasks
+Mix Tasks for compiling Erlang projects.
+
+This project implements targets for running the following Erlang tools:
+
+* cover
+* ct
+* eproper
+* erlydtl
+* eunit
+* exref
 
 ## Installation
 
@@ -10,7 +19,7 @@ in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:mix_erl, "~> 0.1.0"}
+    {:mix_erl, "~> 0.2.1"}
   ]
 end
 ```
