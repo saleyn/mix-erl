@@ -4,12 +4,12 @@ Mix Tasks for compiling Erlang projects.
 
 This project implements targets for running the following Erlang tools:
 
-* cover
-* ct
-* eproper
-* erlydtl
-* eunit
-* exref
+* cover - code coverage analysis
+* ct - run common tests
+* eproper - run PropEr tests
+* erlydtl - compile ErlyDTL templates
+* eunit - run eunit tests
+* exref - perform cross-reference checks
 
 ## Installation
 
@@ -23,3 +23,6 @@ def deps do
   ]
 end
 ```
+
+This will enable the targets mentioned above to be given to `mix` in order
+to run
