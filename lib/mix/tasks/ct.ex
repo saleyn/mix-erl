@@ -69,7 +69,7 @@ defmodule Mix.Tasks.Ct do
     try do
       {:ok, _} = Application.ensure_all_started(:cth_readable)
     rescue _ ->
-      Mix.shell().warn("==> cth_readable application not found - ignoring")
+      Mix.shell().info("==> cth_readable application not found - ignoring")
     end
 
     # Find test suites
