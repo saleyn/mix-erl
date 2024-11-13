@@ -66,7 +66,11 @@ defmodule Mix.Tasks.Ct do
     File.mkdir_p!(target)
 
     {:ok, _} = Application.ensure_all_started(:common_test)
-    {:ok, _} = Application.ensure_all_started(:cth_readable)
+    try do
+      {:ok, _} = Application.ensure_all_started(:cth_readable)
+    rescue _ ->
+      Mix.shell().warn("==> cth_readable application not found - ignoring")
+    end
 
     # Find test suites
     tests =
@@ -138,11 +142,12 @@ defmodule Mix.Tasks.Ct do
     # mute standard output
     mute_off = mute_output()
 
+    add = File.exists?("test/test.config") && [{:config, ~c"test/test.config"}] || []
+
     try do
-      :ct.run_testspec([
+      :ct.run_testspec(add ++ [
         {:ct_hooks, [:cth_readable_failonly, :cth_readable_compact_shell | hooks]},
         {:logdir, to_charlist(log_dir)},
-        {:config, ~c"test/test.config"},
         {:verbosity, [default: verbosity]},
         {:suites, to_charlist(target), suites_atoms}
       ])
