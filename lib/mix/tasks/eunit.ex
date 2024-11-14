@@ -35,10 +35,15 @@ defmodule Mix.Tasks.Eunit do
   def run(args) do
     # validate environment
     Mix.env() != :test &&
-      Mix.raise(
-        "\"mix eunit\" is running in the \"#{Mix.env()}\" environment. " <>
-          "Please prefix mix command with MIX_ENV=test, or make sure MIX_ENV is not set."
-      )
+      Mix.raise """
+      "mix eunit" is running in the "#{Mix.env()}" environment.
+      Please prefix mix command with MIX_ENV=test, or make sure MIX_ENV is not set.
+
+      Alternatively include in your project:
+      '''
+      def cli, do: [preferred_env: [eunit: :test]]
+      '''
+      """
 
     {opts, _, _} = OptionParser.parse(args, strict: @switches)
 
