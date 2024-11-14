@@ -17,7 +17,7 @@ defmodule Mix.Tasks.Ct do
   ```
   mix ct
   mix ct --parallel
-  mix ct rtb_gateway_utils_SUITE
+  mix ct utils_SUITE
   mix ct app[ln]*_SUITE
   mix ct app[ln]*_SUITE *match*_SUITE
   mix ct --cover-digest --cover-export
@@ -41,10 +41,16 @@ defmodule Mix.Tasks.Ct do
   def run(args) do
     # validate environment
     Mix.env() != :test &&
-      Mix.raise(
-        "\"mix ct\" is running in the \"#{Mix.env()}\" environment. " <>
-          "Please prefix mix command with MIX_ENV=test, or make sure MIX_ENV is not set."
-      )
+      Mix.raise """
+        "mix ct" is running in the "#{Mix.env()}" environment.
+        Please prefix mix command with MIX_ENV=test, or make sure MIX_ENV is not set.
+
+        Alternatively include in your project:
+        '''
+        def cli, do: [preferred_env: [ct: :test]]
+        '''
+        """
+
 
     {opts, pos_args, _} = OptionParser.parse(args, strict: @switches)
 
@@ -82,11 +88,16 @@ defmodule Mix.Tasks.Ct do
           "{" <> Enum.join(for(x <- pos_args, do: x <> ".erl"), ",") <> "}"
       end
 
-    Mix.shell().info("Looking for #{inspect(tests)} in #{inspect(Enum.join(@test_dirs, ", "))}")
+    src_dir = Mix.Project.project_file |> Path.dirname |> Path.join("test")
+
+    Mix.shell().info("Looking for #{inspect(tests)} in #{inspect(Enum.join(@test_dirs, ", "))} and #{inspect src_dir}")
 
     suites =
-      Mix.Utils.extract_files(@test_dirs, tests)
+      #(Mix.Utils.extract_files(@test_dirs, tests) ++
+      Mix.Utils.extract_files([src_dir], tests)
       |> Enum.map(fn path ->
+        Mix.shell.info("Checking #{path}")
+
         # test suite name to consider
         base_name = Path.basename(path, ".erl")
 
