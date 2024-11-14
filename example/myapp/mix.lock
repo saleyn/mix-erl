@@ -1,0 +1,5 @@
+%{
+  "cf": {:hex, :cf, "0.2.2", "7f2913fff90abcabd0f489896cfeb0b0674f6c8df6c10b17a83175448029896c", [:rebar3], [], "hexpm", "48283b3019bc7fad56e7b23028a5da4d3e6cd598a553ab2a99a2153bf5f19b21"},
+  "cth_readable": {:hex, :cth_readable, "1.6.0", "a38fa178651da02a9279d6604c542f47b8fda629bf1a90873dd70d94918aa1f8", [:rebar3], [{:cf, "~> 0.2.1", [hex: :cf, repo: "hexpm", optional: false]}], "hexpm", "901e52632b51d5002ffa6d4c89de75a86ed1c95aa32fa1cde04f56e13e0e0599"},
+  "mix_erl": {:git, "https://github.com/saleyn/mix-erl", "6159a0948feb3e00594f6814ba64a25147c3e9dc", [branch: "main"]},
+}
