@@ -10,8 +10,8 @@
 start_link() ->
   supervisor:start_link({local, ?MODULE}, ?MODULE, []).
 
-init([]) ->
-  {ok,
-    _SupFlags   = #{strategy => one_for_all, intensity => 0, period => 1},
+init(_Args) ->
+  {ok, {
+    _SupFlags   = #{strategy => one_for_one, intensity => 1, period => 3},
     _ChildSpecs = []
-  }.
+  }}.

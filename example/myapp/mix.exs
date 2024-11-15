@@ -17,6 +17,7 @@ defmodule MyApp.MixProject do
 
   def application do
     [
+      mod: {:myapp_app, []},
       extra_applications: extra_applications(Mix.env())
     ]
   end
