@@ -19,7 +19,7 @@ defmodule MixErl.MixProject do
 
   defp deps do
     [
-      {:cth_readable, "~> 1.6.0", only: [:test], runtime: false}
+      {:cth_readable, "~> 1.6.0", runtime: false}
     ]
   end
 end

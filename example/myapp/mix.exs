@@ -7,13 +7,11 @@ defmodule MyApp.MixProject do
       app: :myapp,
       version: "0.1.0",
       language: :erlang,
-      erlc_paths: ["src"],
       dialyzer: [plt_add_apps: [:mix]],
       xref_ignores: [:ct, :eunit],
       deps: deps(),
       erlc_options: erlc_options(Mix.env()),
-      erlc_paths: erlc_paths(Mix.env()),
-      elixirc_paths: ~w(test),
+      erlc_paths: erlc_paths(Mix.env())
     ]
   end
 
@@ -27,8 +25,7 @@ defmodule MyApp.MixProject do
     [
       #{:mix_erl, git: "https://github.com/saleyn/mix-erl", branch: "main", runtime: false},
       {:mix_erl, path: "../../", runtime: false},
-      {:cth_readable, "~> 1.6.0", only: [:test], runtime: false}
-
+      #{:cth_readable, "~> 1.6.0", only: [:test], runtime: false}
     ]
   end
 
