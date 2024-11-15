@@ -17,7 +17,7 @@ defmodule MyApp.MixProject do
 
   def application do
     [
-      mod: {:myapp_app, []},
+      #mod: {:myapp_app, []},
       extra_applications: extra_applications(Mix.env())
     ]
   end
@@ -25,8 +25,7 @@ defmodule MyApp.MixProject do
   def deps do
     [
       #{:mix_erl, git: "https://github.com/saleyn/mix-erl", branch: "main", runtime: false},
-      {:mix_erl, path: "../../", runtime: false},
-      #{:cth_readable, "~> 1.6.0", only: [:test], runtime: false}
+      {:mix_erl, path: "../../", runtime: false}
     ]
   end
 
