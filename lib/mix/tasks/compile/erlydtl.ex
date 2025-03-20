@@ -36,6 +36,7 @@ defmodule Mix.Tasks.Compile.Erlydtl do
   """
   use Mix.Task.Compiler
   import Mix.Compilers.Erlang
+  import Mix.Helpers.Compile
 
   @spec run(OptionParser.argv()) ::
           :ok | :noop | {:ok | :noop | :error, [Mix.Task.Compiler.Diagnostic.t()]}
@@ -74,7 +75,7 @@ defmodule Mix.Tasks.Compile.Erlydtl do
       preload.()
     end
 
-    compile_entries(manifest, entries, :dtl, :beam, opts, callback)
+    compile_(manifest, entries, :dtl, :beam, opts, callback)
   end
 
   defp extract_entries(src_dir, src_ext, dest_dir, dest_ext, force) do
