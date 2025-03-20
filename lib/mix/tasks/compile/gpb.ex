@@ -32,7 +32,7 @@ defmodule Mix.Tasks.Compile.Gpb do
 
   """
   use Mix.Task.Compiler
-  import Mix.Compilers.Erlang
+  import Mix.Helpers.Compile
 
   @spec run(OptionParser.argv()) ::
           :ok | :noop | {:ok | :noop | :error, [Mix.Task.Compiler.Diagnostic.t()]}
@@ -77,7 +77,7 @@ defmodule Mix.Tasks.Compile.Gpb do
     end
 
     Path.join(Mix.Project.manifest_path(), "compile.gpb")
-    |> compile_entries(entries, :proto, :erl, opts, callback)
+    |> compile_(entries, :proto, :erl, opts, callback)
   end
 
   defp result(:ok), do: {:ok, [], []}
