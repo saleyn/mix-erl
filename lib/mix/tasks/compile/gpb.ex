@@ -77,7 +77,7 @@ defmodule Mix.Tasks.Compile.Gpb do
     end
 
     Path.join(Mix.Project.manifest_path(), "compile.gpb")
-    |> compile(entries, opts, callback)
+    |> compile_entries(entries, :proto, :erl, opts, callback)
   end
 
   defp result(:ok), do: {:ok, [], []}
@@ -88,7 +88,7 @@ defmodule Mix.Tasks.Compile.Gpb do
 
   defp options(config, input) do
     Enum.find_value(config, [], fn {files, opts} ->
-      Enum.member?(files, input) && opts
+      List.wrap(files) |> Enum.member?(input) && opts
     end)
   end
 end
