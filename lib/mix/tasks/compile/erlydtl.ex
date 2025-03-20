@@ -74,7 +74,7 @@ defmodule Mix.Tasks.Compile.Erlydtl do
       preload.()
     end
 
-    compile(manifest, entries, opts, callback)
+    compile_entries(manifest, entries, :dtl, :beam, opts, callback)
   end
 
   defp extract_entries(src_dir, src_ext, dest_dir, dest_ext, force) do

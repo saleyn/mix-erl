@@ -11,7 +11,10 @@ defmodule MyApp.MixProject do
       xref_ignores: [:ct, :eunit],
       deps: deps(),
       erlc_options: erlc_options(Mix.env()),
-      erlc_paths: erlc_paths(Mix.env())
+      erlc_paths: erlc_paths(Mix.env()),
+      compilers: [:erlydtl, :gpb | Mix.compilers()],
+      erlydtl_options: [compiler_options: [:debug_info]],
+      gpb_config: [{"proto/x.proto", [:include_as_lib, i: ~c"proto", o: ~c"src"]}]
     ]
   end
 
@@ -25,7 +28,9 @@ defmodule MyApp.MixProject do
   def deps do
     [
       #{:mix_erl, git: "https://github.com/saleyn/mix-erl", branch: "main", runtime: false},
-      {:mix_erl, path: "../../", runtime: false}
+      {:mix_erl, path: "../../", runtime: false},
+      {:erlydtl, github: "erlydtl/erlydtl"},
+      {:gpb, "~> 4.21"}
     ]
   end
 

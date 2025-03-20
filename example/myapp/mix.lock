@@ -1,5 +1,7 @@
 %{
   "cf": {:hex, :cf, "0.2.2", "7f2913fff90abcabd0f489896cfeb0b0674f6c8df6c10b17a83175448029896c", [:rebar3], [], "hexpm", "48283b3019bc7fad56e7b23028a5da4d3e6cd598a553ab2a99a2153bf5f19b21"},
   "cth_readable": {:hex, :cth_readable, "1.6.0", "a38fa178651da02a9279d6604c542f47b8fda629bf1a90873dd70d94918aa1f8", [:rebar3], [{:cf, "~> 0.2.1", [hex: :cf, repo: "hexpm", optional: false]}], "hexpm", "901e52632b51d5002ffa6d4c89de75a86ed1c95aa32fa1cde04f56e13e0e0599"},
+  "erlydtl": {:git, "https://github.com/erlydtl/erlydtl.git", "55d93eb3d7056e627f0d38897302706b50b22f34", []},
+  "gpb": {:hex, :gpb, "4.21.3", "99cbd5bce894e9287a8f351210afdcd9d4b413087118a0d738b12a2d67d97591", [:make, :rebar3], [], "hexpm", "f31bf9ef24450c978e2010bcec12272049e14f122511a7ae1488aeba8a835158"},
   "mix_erl": {:git, "https://github.com/saleyn/mix-erl", "6159a0948feb3e00594f6814ba64a25147c3e9dc", [branch: "main"]},
 }
