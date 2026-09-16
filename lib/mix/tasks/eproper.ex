@@ -10,7 +10,7 @@ defmodule Mix.Tasks.Eproper do
   @test_glob "prop_*"
 
   @moduledoc ~S"""
-  Runs the PropEr Tests for a project.
+  Runs the [PropEr](https://github.com/proper-testing/proper) Tests for a project.
 
   # Command line example
 

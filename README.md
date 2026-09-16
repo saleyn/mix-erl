@@ -1,8 +1,8 @@
 # Mix Erl
 
-Mix Tasks for compiling Erlang projects.
+Mix tasks for compiling Erlang projects.
 
-This project implements targets for running the following Erlang tools:
+This project implements tasks for running the following Erlang tools:
 
 * cover - code coverage analysis
 * ct - run common tests
@@ -24,5 +24,10 @@ def deps do
 end
 ```
 
-This will enable the targets mentioned above to be given to `mix` in order
-to run
+This will enable the tasks mentioned above to be given to `mix` in order
+to compile, lint, and test `src/*.erl` files stored inside the Elixir project
+tree.
+
+## License
+
+See the [LICENSE](LICENSE) file.
