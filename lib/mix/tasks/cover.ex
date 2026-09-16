@@ -107,16 +107,10 @@ defmodule Mix.Tasks.Cover do
       end)
 
     # cover extra modules
-    extra_mods =
-      project[:cover_extra_mods] ||
-        []
-        |> MapSet.new()
+    extra_mods = MapSet.new(project[:cover_extra_mods] || [])
 
     # cover denylist modules
-    excl_mods =
-      project[:cover_excl_mods] ||
-        []
-        |> MapSet.new()
+    excl_mods = MapSet.new(project[:cover_excl_mods] || [])
 
     # all compiled modules
     all_mods =
