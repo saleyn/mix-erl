@@ -28,6 +28,9 @@ defmodule Mix.Tasks.Cover do
   # Command line options
 
     * `--html` - save report in html format
+    * `--top-misses` - additionally print modules ranked by missed-line count, to
+      help prioritize where to add tests
+    * `--top` - how many modules to show with `--top-misses` (default: 20)
 
   # Configuration
 
@@ -50,16 +53,18 @@ defmodule Mix.Tasks.Cover do
           "Please prefix mix command with MIX_ENV=test, or make sure MIX_ENV is not set."
       )
 
-    {opts, _, _} = OptionParser.parse(args, strict: [html: :boolean])
+    {opts, _, _} =
+      OptionParser.parse(args, strict: [html: :boolean, top_misses: :boolean, top: :integer])
+
+    # compile tests if not done yet; this also finalizes the project's code path
+    # (tools/cover included), so it must run before ensure_started/0 below
+    Mix.Task.run("compile")
 
     # ensure cover is started, mute cover messages
     ensure_started() |> mute_process()
 
     # reset any existing cover data
     :cover.reset()
-
-    # compile tests if not done yet
-    Mix.Task.run("compile")
 
     # cover-compile eligible modules
     project = Mix.Project.config()
@@ -71,6 +76,8 @@ defmodule Mix.Tasks.Cover do
 
     # generate report
     report(true, opts[:html])
+
+    opts[:top_misses] && print_top_misses(:cover.modules(), opts[:top] || 20)
   end
 
   def compile(project) do
@@ -191,16 +198,17 @@ defmodule Mix.Tasks.Cover do
       {:ok, coverage} = :cover.analyze(mod, :coverage, :line)
       report_path && create_mod_html(mod, report_path)
 
-      stat =
-        Enum.reduce(coverage, {0, 0}, fn
-          {{_, 0}, _}, acc -> acc
-          {_, {c, n}}, {ac, an} -> {c + ac, n + an}
-        end)
-
-      {mod, stat}
+      {mod, line_stat(coverage)}
     end)
     |> Enum.sort()
     |> aggregate()
+  end
+
+  defp line_stat(coverage) do
+    Enum.reduce(coverage, {0, 0}, fn
+      {{_, 0}, _}, acc -> acc
+      {_, {c, n}}, {ac, an} -> {c + ac, n + an}
+    end)
   end
 
   defp create_mod_html(mod, path) do
@@ -238,6 +246,39 @@ defmodule Mix.Tasks.Cover do
 
     IO.puts("#{String.pad_leading("", max_len + 13, ".")}")
     IO.puts("#{pad.(total_str)} : total")
+  end
+
+  defp print_top_misses(modules, top_n) do
+    stats =
+      modules
+      |> Enum.map(fn mod ->
+        {:ok, coverage} = :cover.analyze(mod, :coverage, :line)
+        {hit, miss} = line_stat(coverage)
+        {mod, hit, miss}
+      end)
+      |> Enum.reject(fn {_, hit, miss} -> hit + miss == 0 end)
+      |> Enum.sort_by(fn {_, _, miss} -> -miss end)
+
+    {total_hit, total_miss} =
+      Enum.reduce(stats, {0, 0}, fn {_, hit, miss}, {ah, am} -> {ah + hit, am + miss} end)
+
+    col = &String.pad_leading(to_string(&1), 5)
+
+    IO.puts("")
+    IO.puts("Overall: #{total_hit}/#{total_hit + total_miss} lines covered " <>
+      "(#{pcnt_str(total_hit, total_miss)})")
+    IO.puts("")
+    IO.puts("Top #{min(top_n, length(stats))} modules by missed-line count:")
+    IO.puts("#{col.("miss")}  #{col.("hit")}  #{col.("total")}  #{col.("cov%")}  module")
+    IO.puts(String.duplicate("-", 80))
+
+    stats
+    |> Enum.take(top_n)
+    |> Enum.each(fn {mod, hit, miss} ->
+      IO.puts(
+        "#{col.(miss)}  #{col.(hit)}  #{col.(hit + miss)}  #{col.(pcnt_str(hit, miss))}  #{mod}"
+      )
+    end)
   end
 
   defp write_index({list, total, _max_len}) do
