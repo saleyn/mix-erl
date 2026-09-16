@@ -4,7 +4,7 @@ defmodule MixErl.MixProject do
   def project do
     [
       app:     :mix_erl,
-      version: "0.1.0",
+      version: "1.0.0",
       package: package(),
       deps:    deps(),
       docs:    [
