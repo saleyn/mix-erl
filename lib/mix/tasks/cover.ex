@@ -31,6 +31,8 @@ defmodule Mix.Tasks.Cover do
     * `--top-misses` - additionally print modules ranked by missed-line count, to
       help prioritize where to add tests
     * `--top` - how many modules to show with `--top-misses` (default: 20)
+    * `--quiet` - suppress the standard coverage digest (useful with `--top-misses`
+      to print only the ranking)
 
   # Configuration
 
@@ -54,7 +56,9 @@ defmodule Mix.Tasks.Cover do
       )
 
     {opts, _, _} =
-      OptionParser.parse(args, strict: [html: :boolean, top_misses: :boolean, top: :integer])
+      OptionParser.parse(args,
+        strict: [html: :boolean, top_misses: :boolean, top: :integer, quiet: :boolean]
+      )
 
     # compile tests if not done yet; this also finalizes the project's code path
     # (tools/cover included), so it must run before ensure_started/0 below
@@ -75,7 +79,7 @@ defmodule Mix.Tasks.Cover do
     |> Enum.map(&:cover.import/1)
 
     # generate report
-    report(true, opts[:html])
+    report(!opts[:quiet], opts[:html])
 
     opts[:top_misses] && print_top_misses(:cover.modules(), opts[:top] || 20)
   end
